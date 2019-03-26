@@ -28,3 +28,10 @@ function extract_data_attr(string $key, array $data)
   }
   return '';
 }
+function update_post_metas($post_id, $data)
+{
+  foreach ($data as $key => $value) {
+    // https://developer.wordpress.org/reference/functions/update_post_meta/
+    update_post_meta($post_id, $key, $value);
+  }
+}

@@ -34,7 +34,10 @@ class RecipeDetailsMetabox
     $data = get_post_meta(get_the_ID());
     // Récupération et attribution des valeurs à utiliser pour la view
     $time = extract_data_attr('rat_time_preparation', $data);
-    view('metaboxes/recipe-detail', compact('time'));
+    $num_person = extract_data_attr('rat_person_number', $data);
+    $num_person = extract_data_attr('rat_person_number', $data);
+    view('metaboxes/recipe-detail', compact('time', 'num_person'));
+
   }
   /**
    * sauvegarde des donners de la métabox
@@ -48,9 +51,12 @@ class RecipeDetailsMetabox
     if (count($_POST) != 0) {
       // on ajoute sanitize pour sécurizer les valeurs receuilli par l'utilisateur
       // https://developer.wordpress.org/themes/theme-security/data-sanitization-escaping/
-      $time_preparation = sanitize_text_field($_POST['rat_time_preparation']);
-      // https://developer.wordpress.org/reference/functions/update_post_meta/
-      update_post_meta($post_id, 'rat_time_preparation', $time_preparation);
+      $data = [
+        'rat_time_preparation' => sanitize_text_field($_POST['rat_time_preparation']),
+        'rat_person_number' => sanitize_text_field($_POST['rat_person_number'])
+      ];
+      // enregistrement de toutes les valeurs grâce au helper
+      update_post_metas($post_id, $data);
     }
   }
 }
